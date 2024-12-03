@@ -2,26 +2,30 @@ const searchGithub = async () => {
   try {
     const start = Math.floor(Math.random() * 100000000) + 1;
 
-    const response = await fetch(
-      `https://api.github.com/users?since=${start}`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
-        },
-      }
-    );
+    console.log('Token used for Authorization:', import.meta.env.VITE_GITHUB_TOKEN);
 
-    const data = await response.json();
+    const response = await fetch(`https://api.github.com/users?since=${start}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+      },
+    });
+
+    console.log('Response Status:', response.status);
+
     if (!response.ok) {
-      throw new Error('invalid API response, check the network tab');
+      const errorData = await response.json();
+      console.error('Error response from GitHub API:', errorData);
+      throw new Error('Failed to fetch GitHub API data.');
     }
 
+    const data = await response.json();
     return data;
-  } catch (err) {
-
+  } catch (error) {
+    console.error('Fetch Error:', error);
     return [];
   }
 };
+
 
 const searchGithubUser = async (username: string) => {
   try {

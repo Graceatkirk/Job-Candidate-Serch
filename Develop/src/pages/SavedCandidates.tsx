@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Candidate } from '../interfaces/Candidate.interface';
 
 interface SavedCandidatesProps {
+  // Initially empty savedCandidates as props
   savedCandidates: Candidate[];
 }
 
-const SavedCandidatesComponent: React.FC<SavedCandidatesProps> = ({
-  savedCandidates,
-}) => {
+const SavedCandidatesComponent: React.FC<SavedCandidatesProps> = () => {
+  const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
+
+  // Load saved candidates from localStorage on mount
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
+    setSavedCandidates(saved);
+  }, []);
+
+  // Update localStorage whenever savedCandidates state changes
+  useEffect(() => {
+    if (savedCandidates.length > 0) {
+      localStorage.setItem('savedCandidates', JSON.stringify(savedCandidates));
+    }
+  }, [savedCandidates]);
+
   return (
     <div>
       <h1>Potential Candidates</h1>

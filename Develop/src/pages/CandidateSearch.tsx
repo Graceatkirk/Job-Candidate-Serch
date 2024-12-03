@@ -17,6 +17,10 @@ const CandidateSearch: React.FC = () => {
     };
 
     fetchCandidates();
+    
+    // Load saved candidates from localStorage
+    const saved = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
+    setSavedCandidates(saved);
   }, []);
 
   const currentCandidate = candidates[currentCandidateIndex];
@@ -40,11 +44,16 @@ const CandidateSearch: React.FC = () => {
 
   const saveCandidate = () => {
     if (currentCandidate) {
-      setSavedCandidates((prev) =>
-        prev.some((saved) => saved.id === currentCandidate.id)
-          ? prev
-          : [...prev, currentCandidate]
-      );
+      // Check if the candidate is already saved
+      const isAlreadySaved = savedCandidates.some((saved) => saved.id === currentCandidate.id);
+
+      if (!isAlreadySaved) {
+        const updatedSavedCandidates = [...savedCandidates, currentCandidate];
+        setSavedCandidates(updatedSavedCandidates);
+
+        // Save to localStorage
+        localStorage.setItem('savedCandidates', JSON.stringify(updatedSavedCandidates));
+      }
       nextCandidate();
     }
   };

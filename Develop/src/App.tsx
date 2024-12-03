@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav';
 import CandidateSearch from './pages/CandidateSearch';
-import SavedCandidates from './pages/SavedCandidates';
+import SavedCandidatesComponent from './pages/SavedCandidates';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Routes>
           {/* Define routes */}
           <Route path="/" element={<CandidateSearch />} />
-          <Route path="/saved" element={<SavedCandidates savedCandidates={[]} />} />
+          <Route path="/saved-candidates" element={<SavedCandidatesComponent savedCandidates={[]} />} />
         </Routes>
       </main>
     </>
